@@ -1,0 +1,77 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // =========================
+    // UTILISATEURS
+    // =========================
+    match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+
+      // L'utilisateur peut créer son profil
+      allow create: if request.auth != null;
+
+      // L'utilisateur peut mettre à jour son profil, mais pas le rôle
+      allow update: if request.auth != null
+        && request.auth.uid == userId
+        && !(request.resource.data.keys().hasAny(['role']));
+    }
+
+    // =========================
+    // ANNONCES
+    // =========================
+    match /annonces/{annonceId} {
+
+      // Tout le monde peut lire les annonces disponibles
+      allow read: if true;
+
+      // Création possible uniquement si l'utilisateur est propriétaire
+      allow create: if request.auth != null
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "proprietaire";
+
+      // Modification et suppression seulement par le propriétaire de l'annonce
+      allow update, delete: if request.auth != null
+        && resource.data.ownerId == request.auth.uid;
+    }
+
+    // =========================
+    // LOCATIONS (loyers)
+    // =========================
+    match /locations/{locationId} {
+      // Locataire ou propriétaire peut voir ses locations
+      allow read: if request.auth != null
+        && (request.auth.uid == resource.data.locataireId
+            || request.auth.uid == resource.data.proprietaireId);
+
+      // Création possible pour tout utilisateur connecté
+      allow create: if request.auth != null;
+    }
+
+    // =========================
+    // PAIEMENTS
+    // =========================
+    match /paiements/{paiementId} {
+      // Lecture possible uniquement par le locataire concerné
+      allow read: if request.auth != null
+        && request.auth.uid == resource.data.locataireId;
+
+      // Création de paiement uniquement si l'utilisateur est locataire
+      allow create: if request.auth != null
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "locataire";
+    }
+
+    // =========================
+    // CONTRATS
+    // =========================
+    match /contrats/{contratId} {
+      // Lecture pour locataire et propriétaire concernés
+      allow read: if request.auth != null
+        && (request.auth.uid == resource.data.locataireId
+            || request.auth.uid == resource.data.proprietaireId);
+
+      // Création possible pour tout utilisateur connecté
+      allow create: if request.auth != null;
+    }
+
+  }
+}

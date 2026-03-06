@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KAYACI - Immobilier</title>
+<link rel="stylesheet" href="css/style.css">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+<header>
+  <img src="images/logo1.png" alt="Logo KAYACI" 
+  style="heigh:60px;width:auto;vertical-align:middle;"
+  id="logoHeader">
+  <nav class="navbar">
+  <ul class="nav-list">
+    <li><a href="#" onclick="showSection('home')">Accueil</a></li>
+    <li><a href="#" onclick="showSection('annonces')">Annonces</a></li>
+    <li><a href="#" onclick="showSection('auth')">Connexion</a></li>
+  </ul>
+</nav>
+</header>
+  
+<!-- ACCUEIL -->
+<section id="home">
+  <h2>Annonces récentes</h2>
+  <div id="homeList"></div>
+</section>
+
+<!-- ANNONCES -->
+<section id="annonces" style="display:none;">
+  <h2>Toutes les annonces</h2>
+  <input type="text" id="searchCommune" placeholder="Rechercher commune">
+  <button onclick="searchAnnonces()">Rechercher</button>
+  <div id="annoncesList"></div>
+</section>
+
+<!-- CONNEXION / INSCRIPTION -->
+<section id="auth" style="display:none;">
+  <h2>Connexion / Inscription</h2>
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Mot de passe">
+  <select id="role">
+    <option value="locataire">Locataire</option>
+    <option value="proprietaire">Propriétaire</option>
+  </select>
+  <button onclick="login()">Se connecter</button>
+  <button onclick="register()">S'inscrire</button>
+  <p id="authMessage"></p>
+</section>
+
+<!-- DASHBOARD PROPRIETAIRE -->
+<section id="dashboardProprietaire" style="display:none;">
+  <h2>Dashboard Propriétaire</h2>
+  <div id="proprietaireForm"></div>
+  <div id="mesAnnonces"></div>
+</section>
+
+<!-- DASHBOARD LOCATAIRE -->
+<section id="dashboardLocataire" style="display:none;">
+  <h2>Dashboard Locataire</h2>
+  <div id="mesLoyers"></div>
+</section>
+
+<!-- QUI SOMMES-NOUS -->
+<section id="qui" style="display:none;">
+  <h2>Qui sommes-nous</h2>
+  <p>
+    KAYACI est une plateforme immobilière moderne créée pour faciliter la rencontre entre 
+    propriétaires et locataires en Côte d'Ivoire. Nous mettons la technologie au service 
+    de l'immobilier afin de rendre la location plus simple, transparente et sécurisée.
+  </p>
+  <p>
+    Notre mission est de permettre aux propriétaires de publier facilement leurs biens 
+    et de suivre leurs revenus en temps réel, tout en offrant aux locataires la possibilité 
+    de trouver rapidement des logements adaptés à leurs besoins et à leur budget.
+  </p>
+  <p>
+    Grâce à KAYACI, les paiements de loyers (avance, caution, mensuel) se font de manière 
+    sécurisée via Mobile Money (Orange Money, MTN Mobile Money, Moov Money), avec un 
+    calcul automatique des commissions pour plus de transparence.
+  </p>
+  <p>
+    Nous croyons en la simplicité, la confiance et l’innovation. Notre équipe travaille 
+    chaque jour pour améliorer l’expérience utilisateur et faciliter l’accès au logement 
+    pour tous.
+  </p>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="display:none;">
+  <h2>Contactez-nous</h2>
+  <input type="text" id="contactNom" placeholder="Nom">
+  <input type="email" id="contactEmail" placeholder="Email">
+  <textarea id="contactMessage" placeholder="Message"></textarea>
+  <button onclick="envoyerMessage()">Envoyer</button>
+</section>
+<section id="mentions" style="display:none;">
+  <h2>Mentions Légales</h2>
+
+  <h3>Éditeur du site :</h3>
+  <p>
+    Nom / Raison sociale : [À compléter]<br>
+    Adresse : [À compléter]<br>
+    Téléphone : [À compléter]<br>
+    E-mail : [À compléter]<br>
+    RCCM / NIF : [À compléter]
+  </p>
+
+  <h3>Directeur de la publication :</h3>
+  <p>
+    Nom : [À compléter]
+  </p>
+
+  <h3>Hébergement :</h3>
+  <p>
+    Nom de l’hébergeur : [À compléter]<br>
+    Adresse : [À compléter]<br>
+    Téléphone : [À compléter]
+  </p>
+
+  <h3>Propriété intellectuelle :</h3>
+  <p>
+    Tous les contenus présents sur ce site (textes, images, logos, vidéos, designs, etc.) 
+    sont protégés par le droit d’auteur et sont la propriété exclusive de [À compléter]. 
+    Toute reproduction, diffusion ou exploitation sans autorisation écrite est strictement interdite.
+  </p>
+
+  <h3>Responsabilité :</h3>
+  <p>
+    Le site s’efforce d’assurer l’exactitude des informations diffusées. Toutefois, 
+    [À compléter] ne peut être tenu responsable des erreurs ou omissions.
+  </p>
+
+  <h3>Données personnelles :</h3>
+  <p>
+    Les informations recueillies via ce site sont utilisées uniquement dans le cadre 
+    de la gestion de votre demande. Conformément à la réglementation en vigueur, 
+    vous disposez d’un droit d’accès, de rectification et de suppression de vos données 
+    en contactant [À compléter].
+  </p>
+
+  <h3>Cookies :</h3>
+  <p>
+    Ce site peut utiliser des cookies pour améliorer votre expérience de navigation. 
+    Vous pouvez configurer votre navigateur pour refuser les cookies.
+  </p>
+
+  <h3>Loi applicable :</h3>
+  <p>
+    Le présent site est soumis à la législation de la République de Côte d’Ivoire.
+  </p>
+</section>
+<!-- Toast -->
+<div id="toast"></div>
+
+<script src="js/app.js"></script>
+<!-- Footer -->
+<footer>
+  <div class="footer-content">
+    <p>&copy; 2026 KAYACI. Tous droits réservés.</p>
+    <p>
+      <a href="#" onclick="showSection('qui')">Qui sommes-nous</a> | 
+      <a href="#" onclick="showSection('contact')">Contact</a> | 
+      <a href="#" onclick="showSection('mentions')">Mentions légales</a>
+    </p>
+    <p>
+      <a href="https://facebook.com" target="_blank">Facebook</a> |
+      <a href="https://twitter.com" target="_blank">Twitter</a> |
+      <a href="https://instagram.com" target="_blank">Instagram</a>
+    </p>
+  </div>
+  <div class="menu-toggle" id="mobile-menu">&#9776;</div>
+</footer>
+<div id="annonces-container"></div>
+<script type="module" src="app.js"></script>
+</body>
+</html>

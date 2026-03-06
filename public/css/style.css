@@ -1,0 +1,105 @@
+body { font-family:sans-serif; margin:0; padding:0; }
+header { background:#1a73e8; color:#fff; padding:10px; display:flex; justify-content:space-between; align-items:center; }
+nav button { margin:0 5px; padding:5px 10px; border:none; border-radius:5px; }
+section { padding:10px; }
+.card { border:1px solid #ccc; border-radius:8px; padding:10px; margin-bottom:10px; }
+input, select, textarea, button { display:block; width:100%; margin-bottom:10px; padding:8px; border-radius:5px; }
+#toast { position:fixed; bottom:10px; left:50%; transform:translateX(-50%); background:#333; color:#fff; padding:10px 20px; border-radius:5px; display:none; }
+#homeList, #annoncesList, #mesAnnonces, #mesLoyers { display:grid; gap:10px; }
+@media (max-width: 480px) {
+  header img {
+    height: 100px;
+  }
+}
+header img {
+  height: 80px;        /* Taille du logo */
+  width: auto;         /* Respecte les proportions */
+  vertical-align: middle;
+}
+/* Footer */
+footer {
+  background: #1a73e8;
+  color: #fff;
+  padding: 15px 10px;
+  text-align: center;
+  font-size: 14px;
+}
+
+footer a {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 5px;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+.footer-content p {
+  margin: 5px 0;
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+  header img {
+    height: 100px;
+  }
+
+  footer {
+    font-size: 12px;
+    padding: 10px 5px;
+  }
+
+  .footer-content p {
+    line-height: 1.4;
+  }
+}
+/* Navbar horizontal */
+.navbar {
+  background: #1a73e8;
+  display: flex;
+  justify-content: center; /* centre le menu */
+  padding: 10px 0;
+}
+
+.navbar .nav-list {
+  display: flex;
+  list-style: none;
+  gap: 20px; /* espace entre les liens */
+  margin: 0;
+  padding: 0;
+}
+
+.navbar .nav-list li a {
+  color: white;
+  text-decoration: none;
+  padding: 8px 15px;
+  font-weight: bold;
+  border-radius: 5px;
+  transition: background 0.3s;
+}
+
+.navbar .nav-list li a:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* Responsive pour mobile */
+@media (max-width: 480px) {
+  .navbar .nav-list {
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+}
+#mentions {
+  padding: 15px;
+  line-height: 1.6;
+}
+
+#mentions h2, #mentions h3 {
+  color: #1a73e8;
+}
+
+#mentions h3 {
+  margin-top: 10px;
+}
